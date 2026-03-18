@@ -1,0 +1,29 @@
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+      - name: Create Webhook
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2026-03-10" \
+            /repos/OWNER/REPO/hooks \
+            --input - <<< '{
+            "name": "web",
+            "active": true,
+            "events": [
+              "push",
+              "pull_request"
+            ],
+            "config": {
+              "url": "https://example.com/webhook",
+              "content_type": "json",
+              "insecure_ssl": 0
+            }
+          }'
