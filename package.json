@@ -1,7 +1,7 @@
 {
   "name": "webhook-sync",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.0",
+  "description": "Automatically set up a webhook for the repository with specified events and configuration.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Friedinger/webhook-sync.git"
