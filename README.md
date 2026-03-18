@@ -22,9 +22,8 @@ Add the following step to your workflow:
   with:
     github-token: ${{ secrets.WEBHOOK_TOKEN }}
     webhook-url: ${{ secrets.WEBHOOK_URL }}
-    events: push, pull_request
+    events: "push, pull_request"
     secret: ${{ secrets.WEBHOOK_SECRET }}
-    content-type: json
 ```
 
 **Note:** You need to provide a GitHub token with read and write access to webhooks for your repository. The default `github.token` is not sufficient for this action, so you must create a personal access token or use a github app token.
@@ -57,9 +56,9 @@ jobs:
         with:
           github-token: ${{ secrets.WEBHOOK_TOKEN }}
           webhook-url: ${{ secrets.WEBHOOK_URL }}
-          events: push, pull_request
+          events: "push, pull_request"
           secret: ${{ secrets.WEBHOOK_SECRET }}
-          content-type: json
+          content-type: "json"
 ```
 
 ## Development
