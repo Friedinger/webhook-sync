@@ -4,7 +4,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    permissions: write-all
 
     steps:
       - name: Create Webhook
