@@ -1,0 +1,44 @@
+{
+  "name": "webhook-sync",
+  "version": "0.0.0",
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Friedinger/webhook-sync.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Friedinger/webhook-sync/issues"
+  },
+  "homepage": "https://github.com/Friedinger/webhook-sync#readme",
+  "keywords": [],
+  "author": "Friedinger",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0 <=24"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npx ncc build src/index.ts -o dist --license licenses.txt",
+    "test": "vitest run",
+    "lint": "prettier . --check && eslint .",
+    "fix": "prettier . --write && eslint . --fix"
+  },
+  "dependencies": {
+    "@actions/core": "3.0.0",
+    "@actions/github": "9.0.0",
+    "@octokit/rest": "22.0.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "24.12.0",
+    "@vercel/ncc": "0.38.4",
+    "@vitest/coverage-v8": "4.1.0",
+    "eslint": "10.0.3",
+    "eslint-config-prettier": "10.1.8",
+    "prettier": "3.8.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.57.1",
+    "vitest": "4.1.0"
+  }
+}
