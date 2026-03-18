@@ -9,13 +9,13 @@ inputs:
     description: "The URL of the webhook to create or update"
     required: true
   events:
-    description: "Comma-separated list of events to subscribe to (e.g. 'push,pull_request')"
+    description: "Comma-separated list of events to subscribe to"
     required: true
   secret:
-    description: "Secret to use for securing the webhook (optional)"
+    description: "Secret to use for securing the webhook"
     required: false
   content-type:
-    description: "Content type for the webhook payload (default: 'json')"
+    description: "Content type for the webhook payload"
     required: false
     default: "json"
 
