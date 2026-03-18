@@ -1,0 +1,24 @@
+name: "webhook-sync"
+description: ""
+
+inputs:
+  github-token:
+    description: "GitHub token to use for authentication"
+    required: true
+  webhook-url:
+    description: "The URL of the webhook to create or update"
+    required: true
+  events:
+    description: "Comma-separated list of events to subscribe to (e.g. 'push,pull_request')"
+    required: true
+  secret:
+    description: "Secret to use for securing the webhook (optional)"
+    required: false
+  content-type:
+    description: "Content type for the webhook payload (default: 'json')"
+    required: false
+    default: "json"
+
+runs:
+  using: "node24"
+  main: "dist/index.js"
