@@ -62,8 +62,7 @@ jobs:
   commit-build:
     name: Commit Action Build
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/main'
-    if: false
+    if: github.ref == 'refs/heads/main'
     needs: test
 
     permissions:
