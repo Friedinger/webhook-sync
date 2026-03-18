@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Create Webhook
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
         run: |
           gh api \
             --method POST \
