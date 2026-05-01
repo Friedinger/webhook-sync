@@ -52,12 +52,54 @@ jobs:
           name: action-dist
           path: dist
 
+      - name: Delete existing webhook
+        env:
+          GH_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          WEBHOOK_URL: https://example.com/webhook
+        run: |
+          set -euo pipefail
+
+          hook_ids=$(gh api "repos/$REPOSITORY/hooks" --paginate | jq -r -s --arg url "$WEBHOOK_URL" '[.[] | .[] | select(.config.url == $url) | .id] | .[]')
+
+          if [ -z "$hook_ids" ]; then
+            echo "No existing webhook found for $WEBHOOK_URL"
+            exit 0
+          fi
+
+          for hook_id in $hook_ids; do
+            gh api --method DELETE "repos/$REPOSITORY/hooks/$hook_id"
+            echo "Deleted webhook $hook_id"
+          done
+
       - name: Run action
         uses: ./
         with:
           github-token: ${{ secrets.WEBHOOK_TOKEN }}
           webhook-url: "https://example.com/webhook"
           events: "push,pull_request"
+
+      - name: Verify webhook was recreated
+        env:
+          GH_TOKEN: ${{ secrets.WEBHOOK_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          WEBHOOK_URL: https://example.com/webhook
+        run: |
+          set -euo pipefail
+
+          hooks_json=$(gh api "repos/$REPOSITORY/hooks" --paginate | jq -s --arg url "$WEBHOOK_URL" '[.[] | .[] | select(.config.url == $url)]')
+
+          echo "Found $(printf '%s' "$hooks_json" | jq 'length') matching webhook(s) for $WEBHOOK_URL"
+          printf '%s' "$hooks_json" | jq -r '.[] | "Webhook ID: \(.id), active: \(.active), content_type: \(.config.content_type), events: \(.events | join(","))"'
+
+          printf '%s' "$hooks_json" | jq -e --arg url "$WEBHOOK_URL" '
+            length == 1
+            and .[0].active == true
+            and .[0].config.url == $url
+            and .[0].config.content_type == "json"
+            and (.[0].events | index("push"))
+            and (.[0].events | index("pull_request"))
+          ' >/dev/null
 
   commit-build:
     name: Commit Action Build
