@@ -87,14 +87,18 @@ jobs:
         run: |
           set -euo pipefail
 
-          gh api "repos/$REPOSITORY/hooks" --paginate | jq -e -s --arg url "$WEBHOOK_URL" '
-            [ .[] | .[] | select(.config.url == $url) ] as $hooks
-            | ($hooks | length == 1)
-            and ($hooks[0].active == true)
-            and ($hooks[0].config.url == $url)
-            and ($hooks[0].config.content_type == "json")
-            and ($hooks[0].events | index("push"))
-            and ($hooks[0].events | index("pull_request"))
+          hooks_json=$(gh api "repos/$REPOSITORY/hooks" --paginate | jq -s --arg url "$WEBHOOK_URL" '[.[] | .[] | select(.config.url == $url)]')
+
+          echo "Found $(printf '%s' "$hooks_json" | jq 'length') matching webhook(s) for $WEBHOOK_URL"
+          printf '%s' "$hooks_json" | jq -r '.[] | "Webhook ID: \(.id), active: \(.active), content_type: \(.config.content_type), events: \(.events | join(","))"'
+
+          printf '%s' "$hooks_json" | jq -e --arg url "$WEBHOOK_URL" '
+            length == 1
+            and .[0].active == true
+            and .[0].config.url == $url
+            and .[0].config.content_type == "json"
+            and (.[0].events | index("push"))
+            and (.[0].events | index("pull_request"))
           ' >/dev/null
 
   commit-build:
