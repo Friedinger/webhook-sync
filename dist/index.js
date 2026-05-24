@@ -36337,7 +36337,8 @@ function parseInputs() {
     const webhookUrl = getInput("webhook-url", { required: true });
     const events = getInput("events", { required: true })
         .split(",")
-        .map((e) => e.trim());
+        .map((e) => e.trim())
+        .filter(Boolean);
     const secret = getInput("secret", { required: false });
     const contentType = getInput("content-type", { required: true });
     if (!["json", "form"].includes(contentType)) {
