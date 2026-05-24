@@ -26,14 +26,18 @@ describe("index", () => {
     mockMain.mockResolvedValue(undefined);
     await runIndex();
 
-    expect(mockMain).toHaveBeenCalled();
-    expect(core.setFailed).not.toHaveBeenCalled();
+    await vi.waitFor(() => {
+      expect(mockMain).toHaveBeenCalled();
+      expect(core.setFailed).not.toHaveBeenCalled();
+    });
   });
 
   it("calls setFailed when main rejects", async () => {
     mockMain.mockRejectedValue(new Error("error"));
     await runIndex();
 
-    expect(core.setFailed).toHaveBeenCalledWith("error");
+    await vi.waitFor(() => {
+      expect(core.setFailed).toHaveBeenCalledWith("error");
+    });
   });
 });

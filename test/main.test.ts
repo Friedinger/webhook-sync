@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as core from "@actions/core";
 import { Octokit } from "@octokit/rest";
+import packageJson from "../package.json";
 import { parseInputs } from "../src/inputs";
 import { findExistingWebhook, listWebhooks } from "../src/webhookGet";
 import { saveWebhook } from "../src/webhookSave";
@@ -97,7 +98,12 @@ describe("main", () => {
       undefined,
     );
     expect(infoMock).toHaveBeenCalledWith(
-      "🛠️ Running Friedinger/webhook-sync@v1.0.0",
+      `🛠️ Running Friedinger/webhook-sync@v${packageJson.version}`,
+    );
+    expect(infoMock).toHaveBeenCalledWith(
+      expect.stringMatching(
+        /^🛠️ Running Friedinger\/webhook-sync@v\d+\.\d+\.\d+$/,
+      ),
     );
     expect(infoMock).toHaveBeenCalledWith(
       "📦 Found 1 webhooks for repo owner/repo",
