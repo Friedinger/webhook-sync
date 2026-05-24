@@ -6,7 +6,8 @@ export function parseInputs() {
   const events = core
     .getInput("events", { required: true })
     .split(",")
-    .map((e) => e.trim());
+    .map((e) => e.trim())
+    .filter(Boolean);
   const secret = core.getInput("secret", { required: false });
   const contentType = core.getInput("content-type", { required: true });
 
